@@ -1,0 +1,64 @@
+<html>
+<head>
+    <title>Pnuemonia Detection System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="split left" >
+        <h1 class="header">P N E U M O N I A &nbsp; D E T E C T I O N &nbsp; S Y S T E M</h1>
+        <h3 class="sub" style="text-align: center; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: large;">Upload a Chest X-Ray to receive a diagnositc</h3>
+        <div class="container">
+            <label for="image-selector" class="button btn2">
+                <i class="upbtn"></i> UPLOAD X-RAY
+            </label>
+        </div>
+            <input class="img" id="image-selector" type="file"/>
+
+        <div class="container2">
+            <button class="btn btn1" id="predict-button">PREDICT</button>
+        </div>
+
+        <div class="Pred">
+            <li>
+                <h3>Normal - <span class="normal" id="normal-prediction"></span></h3>
+            </li>
+            <li>
+                <h3>Pneumonia - <span class="pneumonia" id="pneumonia-prediction"></span></h3>
+            </li>
+        </div>
+        <img src="blood2.jpg" height="28%" width="70%" style=" margin-left: 13%">
+    </div>
+    <div class="split right">
+        <img class="img" id="selected-image"  src=""/>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+            let base64Image;
+            $("#image-selector").change(function(){
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let dataURL = reader.result;
+                    $("#selected-image").attr("src",dataURL);
+                    base64Image=dataURL.replace("data:image/jpeg;base64,","");
+                    console.log(base64Image);
+                }
+                reader.readAsDataURL($("#image-selector")[0].files[0]);
+                $("#normal-prediction").text("");
+                $("#pneumonia-prediction").text("");
+            });
+            $("#predict-button").click(function(event){
+                let message = {
+                    image: base64Image
+                }
+                console.log(message);
+                $.post("http://localhost:5000/predict.html", JSON.stringify(message), function(response){
+                    $("#normal-prediction").text(response.prediction.Normal.toFixed(6));
+                    $("#pneumonia-prediction").text(response.prediction.Pneumonia.toFixed(6));
+                    console.log(response);
+                })
+            })
+
+        </script>
+</body>
+</html>
