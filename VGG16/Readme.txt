@@ -1,6 +1,5 @@
 First Iteration of major project using vgg16 method
 Accuracy rate - 87.5%
-Problems - Training data set ma pneumonia wala images dherai cha so model is biased and more accurate towards pneumonia wala images
 Library versions-
 # Name                    Version                   Build  Channel
 _ipyw_jlab_nb_ext_conf    0.1.0                    py36_0
